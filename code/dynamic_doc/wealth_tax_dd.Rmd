@@ -139,6 +139,7 @@ invisible( list2env(call_sources_f(),.GlobalEnv) )
 knitr::include_graphics(path = paste0(here(),"/code/main_pe.png"))
 ```
 Tax revenue from wealth tax in first year: $199 billion
+
 Tax revenue from wealth tax over 10 year: $2.6 trillion
 
 Percentage of US households paying the wealth tax: 0.05%

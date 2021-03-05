@@ -121,6 +121,19 @@ invisible( list2env(call_sources_f(),.GlobalEnv) )
 ```
 
 <img src="C:/Users/keanu/Documents/GitHub/opa-wealthtax/opa-wealthtax/code/main_pe.png" width="100%" style="display: block; margin: auto;" />
+Tax revenue from wealth tax in first year: $199 billion
+Tax revenue from wealth tax over 10 year: $2.6 trillion
+
+Percentage of US households paying the wealth tax: 0.05%
+
+**[Click here](http://wealthtaxsimulator.org/simulator_app/) to explore different policy proposals and to see how the assumptions of the analysis affect the results.**
+
+**There are two ways to edit the code behind this document:**   
+1 - Download/Clone [this repository](https://github.com/fhoces/opa-wealthtax) into your computer. You will need to install [R](https://cloud.r-project.org/) and [RStudio](https://www.rstudio.com/products/rstudio/download/#download).    
+
+2 - Go to [this link](https://mybinder.org/v2/gh/fhoces/opa-wealthtax/master?urlpath=rstudio) and reproduce all the results in a computing enviroment (supported by [project binder](https://mybinder.org/)). You will **not** need to install anything in your computer.  
+
+
 
 <div class = "divider"><span></span><span>
 Executive Summary
@@ -880,27 +893,27 @@ plot <- data[, -rmIdx] %>%
   plot
 ```
 
-<!--html_preserve--><div id="plot_id661573974-container" class="ggvis-output-container">
-<div id="plot_id661573974" class="ggvis-output"></div>
+<!--html_preserve--><div id="plot_id306507719-container" class="ggvis-output-container">
+<div id="plot_id306507719" class="ggvis-output"></div>
 <div class="plot-gear-icon">
 <nav class="ggvis-control">
 <a class="ggvis-dropdown-toggle" title="Controls" onclick="return false;"></a>
 <ul class="ggvis-dropdown">
 <li>
 Renderer: 
-<a id="plot_id661573974_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id661573974" data-renderer="svg">SVG</a>
+<a id="plot_id306507719_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id306507719" data-renderer="svg">SVG</a>
  | 
-<a id="plot_id661573974_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id661573974" data-renderer="canvas">Canvas</a>
+<a id="plot_id306507719_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id306507719" data-renderer="canvas">Canvas</a>
 </li>
 <li>
-<a id="plot_id661573974_download" class="ggvis-download" data-plot-id="plot_id661573974">Download</a>
+<a id="plot_id306507719_download" class="ggvis-download" data-plot-id="plot_id306507719">Download</a>
 </li>
 </ul>
 </nav>
 </div>
 </div>
 <script type="text/javascript">
-var plot_id661573974_spec = {
+var plot_id306507719_spec = {
   "data": [
     {
       "name": ".0",
@@ -1388,7 +1401,7 @@ var plot_id661573974_spec = {
   },
   "handlers": null
 };
-ggvis.getPlot("plot_id661573974").parseSpec(plot_id661573974_spec);
+ggvis.getPlot("plot_id306507719").parseSpec(plot_id306507719_spec);
 </script><!--/html_preserve-->
  <font size="4"> Tax revenue from wealth tax in first year: $199 billion </font>  
  

@@ -1,32 +1,45 @@
 ---
-title: "<center><div class= 'mytitle'>Dynamic Documentation for Senator Warren's Wealth Tax Policy Analysis</div></center>"
+# To compile into .doc format, please see this tutorial: ADD LINK
+title: "<center><div class= 'mytitle'>Open Policy Analysis For Senator Warren's Wealth Tax </div></center>"
+date: "<center><div class='mysubtitle'>`r format(Sys.time(), '%d %B, %Y')`</div></center>"
 author:
 - 'Policy Analysis: Emmanuel Saez  & Gabriel Zucman[^1]'
 - 'Dynamic Document: Fernando Hoces de la Guardia[^2]'
 - '[List of all contributors](https://github.com/fhoces/opa-wealthtax/blob/master/credits.md) to the entire Open Policy Analysis'
-date: "`r format(Sys.time(), '%d %B, %Y')`"
+
 output:
-  html_document:
+  bookdown::html_document2:
+    code_download: yes
     code_folding: hide
-    collapsed: yes
+    css: style.css
+    highlight: tango
+    includes:
+      after_body: footer.html
     keep_md: yes
-    number_sections: no
-    smooth_scroll: no 
+    number_sections: yes
+    smooth_scroll: no
+    theme: sandstone
     toc: yes
+    toc_collapsed: no
     toc_depth: 3
     toc_float: yes
-  word_document:
+  html_document:
+    df_print: paged
     toc: yes
     toc_depth: '3'
-  pdf_document: default
-editor_options:
-  chunk_output_type: console
-always_allow_html: yes
+  word_document: null
+link-citations: yes
+pdf_document:
+  extra_dependencies: xcolor
+  fig_caption: no
+bibliography: bibliography.bib
+
 ---
 
 ```{r setup, include=FALSE} 
 # Loading required libraries
-list.of.packages <- c("tidyverse", "haven", "here", "ggvis", "kableExtra", 'bookdown')
+list.of.packages <- c("tidyverse", "haven", "here", "ggvis", "kableExtra", 'bookdown',
+                      "rootSolve","shinyBS", "shinythemes","ggplot2")
 
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages, repos= "https://cloud.r-project.org")
@@ -126,22 +139,23 @@ invisible( list2env(call_sources_f(),.GlobalEnv) )
 knitr::include_graphics(path = paste0(here(),"/code/main_pe.png"))
 ```
 
-<center><div class = "divider"><span></span><span><center>
+<div class = "divider"><span></span><span>
 Executive Summary
 </span><span></span></div>
 
-INSERT EXEC SUMMARY HERE.
+INSERT EXEC SUMMARY HERE
 
 <div class = "divider"><span></span><span>
 *
 </span><span></span></div>
 
 
+
 # Open Policy Analysis {-}
 
 INSERT OPA THING HERE
 
-### 1 - Policy choices
+# Policy choices 
 
 The wealth tax applies to net worth (sum of all assets net of debts) above $50 million, and obeys the following structure:
 
@@ -174,7 +188,7 @@ knitr::kable(cbind("Bracket (millions of $)" = brackets_po/1e6,
 
 Household net worth above `r paste0("$", starting_brack_po/1e7)` million would be taxed at `r paste(main_tax_po * 100, "%", sep = "")`. Any wealth over `r paste0("$", next_increase_po/1e9)` billion would be taxed an additional 1% (a billionaire surtax).
 
-### 2 -  Compute tax avoidance elasticity
+# Compute tax avoidance elasticity 
 
 To calculate the revenue from this wealth tax, the extent of wealth tax evasion/avoidance is estimated based on recent research showing that it depends crucially on loopholes and enforcement. The tax-avoidance elasticity is computed as the average elasticity from four studies. The table lists the four studies and the avoidance/evasion response to a 1% wealth tax.
 
@@ -219,14 +233,14 @@ invisible( list2env(tax_elasticity_in_f(),.GlobalEnv) )
 
 The final `r paste0(evasion_param_in * 100,"%")` tax avoidance/evasion response to a `r paste0(main_tax_po * 100, "%")` wealth tax was computed as and average across these four studies (`r paste0(main_tax_po * 100, "%", "*(", ela1_so, "+", ela2_so, "+" ,(ela3_1_so+ela3_2_so)/2, "+", (ela4_1_so+ela4_2_so)/2, ")/4")`).
 
-### 3 - Data sources
+# Data sources 
 Three data sources were used in this analysis:   
 
  - [Distributional National Accounts (DINA)](http://gabriel-zucman.eu/usdina/): estimates wealth by capitalizing investment income from income tax returns. Latest year available: 2019.    
  - [Survey of Consumer Finances (SCF)](https://www.federalreserve.gov/econres/scfindex.htm) from the Federal Reserve Board. Most recent year available: 2016.    
  - [Forbes 400](https://www.forbes.com/forbes-400/#4d358acf7e2f): provides the best estimate of billionares in the US. Most recent year available: 2018.  
 
-#### 3.1 Data cleaning
+## Data cleaning 
 
 From each data set three variable were extracted: `networth` that contain information on wealth, `weights` represents the number of households that each observation represents and `data` which tracks the data of origin.
 
@@ -372,7 +386,7 @@ invisible(list2env(clean_data_f(),.GlobalEnv) )
 
 The total household net worth projection is `r paste0("$", round(total_wealth_in))` trillion for 2019 (the SCF records a total household net worth of `r paste0("$", round(total_wealth_scf_in))` trillion in 2016).
 
-#### 3.2 Generating  percentiles and micro-percentiles 
+## Generating  percentiles and micro-percentiles 
 
 In this section, the microdata generated before (`wealth.dta`) is aggregated into percentiles and fractions of a percentile. The final analytic file contains: percentile or fraction of percentile (`gperc`), number of households in that group (`nb`), lowest level of wealth in that group (`thres`), and average level of wealth in that group (`avg`)  
 
@@ -399,7 +413,7 @@ qui compress
 export delimited using "$repository/analysis_data/tax_grid.csv", replace
 ```
 
-### 4 - Number of affected households and their total tax base 
+# Number of affected households and their total tax base 
 
 To compute the relevant universe the evasion parameter of `r paste0(evasion_param_in *100, "%")` is applied to both the threshold and the average wealth of each percentile (and fraction of a percentile)
 
@@ -477,16 +491,16 @@ target_hhlds_bn_round <- round(target_hhlds_bn_mo / 1000) * 1000
 
 In 2019, there would be around `r  target_hhlds_round` households liable for the wealth tax (`r target_hhlds_noav_round` before accounting for avoidance). This would be less than `r paste0(round(target_hhlds_mo/total_hhlds_so * 100 , digits = 2), "%")` of the `r round(total_hhlds_so/1e7) * 10` million US households in 2019. 
 
-#### 4.1 - `r paste0(main_tax_po * 100, "%")` tax on all wealth above `r paste0("$",starting_brack_po/1e6)` millions
+## `r paste0(main_tax_po * 100, "%")` tax on all wealth above `r paste0("$",starting_brack_po/1e6)` millions
 
 The `r target_hhlds_mo` households with assests totaling over `r paste0("$",starting_brack_po/1e6)` million would have a total taxable wealth (above the `r paste0("$",starting_brack_po/1e6, "million")`) of `r paste("$", round(tax_base_total_mo, digits = 1), sep="")` trillion,  i.e. approximately `r paste0(round(tax_base_total_mo/total_wealth_in* 100), "%")`  of the `r paste0("$", round(total_wealth_in))` trillion population-wide, total household net worth.
 
-#### 4.2 - `r paste0((max_tax_po - main_tax_po) * 100, "%")` additional tax on all wealth above `r paste0("$",next_increase_po/1e9)` billion
+## `r paste0((max_tax_po - main_tax_po) * 100, "%")` additional tax on all wealth above `r paste0("$",next_increase_po/1e9)` billion
 
 The `r target_hhlds_bn_mo` households with assests totaling over `r paste0("$",next_increase_po/1e9)` billion dollars would have a total taxable wealth (above the `r paste0("$",next_increase_po/1e9, "billion")`) of `r paste("$", round(tax_base_total_surtax_mo, digits = 1), sep="")` trillion,  i.e. approximately `r paste0(round(tax_base_total_surtax_mo/total_wealth_in* 100), "%")`  of the `r paste0("$", round(total_wealth_in))` trillion population-wide, total household net worth.
 
 
-### 5 - Total tax revenue in one year
+# Total tax revenue in one year 
 
 ```{r new-tax-rev, eval=TRUE, echo=print_code} 
 # DESCRIBE FUNCTIONS STRUCTURE
@@ -594,7 +608,7 @@ target_hhlds_mo <- sum( numberTaxpayers$totalPeople[brackets_po>=starting_brack_
 
 Starting with the `r paste0("$", round(tax_base_total_mo, digits = 1))` trillion tax base of wealth above `r paste0("$", starting_brack_po/1e6)` million (`r paste0("$", round(tax_base_total_noav_mo, digits = 1))` with no avoidance), a `r paste0(main_tax_po * 100, "%")` tax would raise `r paste0("$", round(tax_rev_init_mo))` billion in 2019. The billionaire surtax is estimated to apply to a base of `r paste0("$", round(tax_base_total_surtax_mo, 1))` trillion (`r paste0("$", round(tax_base_total_surtax_noav_mo, digits = 1))` with no avoidance) from about `r round(target_hhlds_bn_mo / 100) * 100 ` billionaire families (`r round(target_hhlds_bn_noav_mo / 100) * 100 `  with no avoidance). Thus the billionaire surtax would raise `r paste0("$", round(top_tax_rev_in))` billion in 2019. The combination of the `r paste0(100*main_tax_po, "%")` tax above `r paste0("$",starting_brack_po/1e6)` million and the billionaire surtax would raise `r paste0(round(tax_rev_init_mo,1)," + ", round(top_tax_rev_in,1))` = `r round(total_tax_rev,1)` billion in 2019. 
 
-### 6 - Ten year projections
+# Ten year projections  
 
 ```{r ten-years, echo=print_code}  
 # - inputs: inflation_so, population_gr_so, real_growth_so, total_rev_pe, top_tax_rev_in
@@ -641,7 +655,7 @@ sapply(ls(pattern = "_pe\\b"), get)
 
 
 
-### 7 - Visualization
+# Visualization 
 
 The figure below illustrates the distribution of wealth tax across the population:
 
@@ -806,12 +820,12 @@ plot <- data[, -rmIdx] %>%
 2 - Go to [this link](https://mybinder.org/v2/gh/fhoces/opa-wealthtax/master?urlpath=rstudio) and reproduce all the results in a computing enviroment (supported by [project binder](https://mybinder.org/)). You will **not** need to install anything in your computer.  
 
 
-### 8 - Wealth inequality
+# Wealth inequality 
 One of the key motivations for introducing a progressive wealth tax is to curb the
 growing concentration of wealth. The top 0.1% wealth share has increased dramatically from about 7% in the late 1970s to around 20% in recent years. Conversely, the wealth share of the bottom 90% of families has declined from about 35% in the late 1970s to about 25% today. This fall has been primarily the consequence of increased debt for the bottom 90% (through mortgage refinance, consumer credit, and student loans). As a result, the top 0.1% today owns almost as much wealth as the bottom 90% of US families. 
 
 
-### 9 - Tax burden on the wealthiest 0.1%
+# Tax burden on the wealthiest 0.1% 
 
 The estimates of Piketty, Saez, and Zucman (2018) show that the total burden (including all taxes at the federal, state, and local levels) of the wealthiest 0.1% families is projected to be 3.2% of their wealth in 2019 (they have on average \$116 million in wealth, and pay total of \$3.68 million in taxes). The proposed progressive wealth tax would add an extra \$1.27 million (or 1.1% of wealth) to their tax burden for a total tax burden (relative to wealth) of 4.3%.
 
@@ -819,6 +833,8 @@ In contrast, the bottom 99% families have a total tax burden of 7.2% relative to
 
 
 **Note:** Our analysis complies with the highest levels of transparency and reproducibilty for open policy analysis proposed by the [_Berkeley Initiative for Transparency in the Social Sciences_](https://www.bitss.org/opa/). We invite contributors and critics of this analysis to follow similar standards. 
+
+# References {-}
 
 [^1]: The authors would like to particularly acknowledge the excellent research assitanship of Katie Donnelly Moran and Clancy Green. 
 

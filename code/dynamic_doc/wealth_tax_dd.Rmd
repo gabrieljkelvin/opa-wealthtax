@@ -1,5 +1,5 @@
 ---
-title: "Dynamic Documentation for Senator Warren's Wealth Tax Policy Analysis"
+title: "<center><div class= 'mytitle'>Dynamic Documentation for Senator Warren's Wealth Tax Policy Analysis</div></center>"
 author:
 - 'Policy Analysis: Emmanuel Saez  & Gabriel Zucman[^1]'
 - 'Dynamic Document: Fernando Hoces de la Guardia[^2]'
@@ -26,10 +26,10 @@ always_allow_html: yes
 
 ```{r setup, include=FALSE} 
 # Loading required libraries
-list.of.packages <- c("tidyverse", "haven", "EnvStats", "here", "ggvis", "kableExtra")
+list.of.packages <- c("tidyverse", "haven", "here", "ggvis", "kableExtra", 'bookdown')
 
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages, repos= "http://cran.cnr.berkeley.edu/")
+if(length(new.packages)) install.packages(new.packages, repos= "https://cloud.r-project.org")
 
 lapply(list.of.packages, library, character.only = TRUE)
 
@@ -120,6 +120,26 @@ call_sources_f <- function(){
 invisible( list2env(call_sources_f(),.GlobalEnv) )
 
 ```
+
+```{r main-pe-print, out.width = '100%', fig.align='center', echo=FALSE, purl=FALSE}
+# url
+knitr::include_graphics(path = paste0(here(),"/code/main_pe.png"))
+```
+
+<center><div class = "divider"><span></span><span><center>
+Executive Summary
+</span><span></span></div>
+
+INSERT EXEC SUMMARY HERE.
+
+<div class = "divider"><span></span><span>
+*
+</span><span></span></div>
+
+
+# Open Policy Analysis {-}
+
+INSERT OPA THING HERE
 
 ### 1 - Policy choices
 
@@ -769,6 +789,7 @@ plot <- data[, -rmIdx] %>%
     layer_paths(data = extra3, ~ x / 1e6, ~y) %>%
     layer_paths(data = extra3b, ~ x / 1e6, ~y)
   plot
+  
 ```
  <font size="4"> Tax revenue from wealth tax in first year: `r paste0("$", round(total_tax_rev))` billion </font>  
  

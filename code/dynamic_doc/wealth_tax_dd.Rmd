@@ -541,7 +541,7 @@ The `r target_hhlds_bn_mo` households with assests totaling over `r paste0("$",n
 
 #This function computes the total tax collected for a tax unit with wealth "wealth_var", applying "taxrates_var" to "brackets_var"
 # - inputs: wealth, tax rates, brackets to tax
-# - ouputs: total tax collected
+# - outputs: total tax collected
 get_tax_rev <- function(wealth_var = wealth_aux, taxrates_var = tax_rates_po,
                           brackets_var = brackets_po) {
     ## expecting taxLevels in percentage
@@ -551,7 +551,7 @@ get_tax_rev <- function(wealth_var = wealth_aux, taxrates_var = tax_rates_po,
     }
    # Compute max taxable wealth per bracket
     max_tax_per_brack <- c(diff(c(0, brackets_var)), 1e100)
-   # Substract wealth minus tax bracket. If wealth above a given bracket (difference is larger than max taxable wealth), 
+   # Subtract wealth minus tax bracket. If wealth above a given bracket (difference is larger than max taxable wealth), 
    # then assign max taxable wealth to that given bracket
     to_tax <- ifelse( wealth_var - c(0, brackets_var) > max_tax_per_brack, 
                       max_tax_per_brack, 
@@ -577,9 +577,9 @@ get_tax_rev_per_group <- function(grid_var = grid, taxLevels_var = tax_rates_po,
   return(sum(grid_var$nb * aux_var) / 1e9)
 }
 
-tax_rev_init_mo <- get_tax_rev_per_group(taxLevels = c(tax_rates_po[-7], 0.02))
-top_tax_rev_in <- get_tax_rev_per_group(taxLevels = c(rep(0,6), 0.01))
-total_tax_rev <- get_tax_rev_per_group(taxLevels = tax_rates_po)
+tax_rev_init_mo <- get_tax_rev_per_group(taxLevels_var = c(tax_rates_po[-7], 0.02))
+top_tax_rev_in <- get_tax_rev_per_group(taxLevels_var = c(rep(0,6), 0.01))
+total_tax_rev <- get_tax_rev_per_group(taxLevels_var = tax_rates_po)
 #199.7889
 
 # The following replicates stata code more closely and seems more straightforward. 
@@ -595,7 +595,7 @@ if (FALSE){
     #billionares additional 1%
     top_tax_rev_in <- grid %>% 
       filter(thresNew > next_increase_po) %>% 
-      summarise(sum((avgNew - next_increase_po) * nb * 0.01)/1e9) %>% as.numeric()
+      summarise(sum((avgNew - next_increase_po) * nb * 0.01)/1e9, ) %>% as.numeric()
     
     total_tax_rev <- total_tax_base + total_tax_sur_bill
 }
@@ -606,7 +606,7 @@ getPeoplePerBracket=function(grid, brackets){
   grid$group=cut(grid$thresNew, brackets)
   toReturn = grid %>% 
     group_by(group) %>% 
-    summarise(totalPeople=sum(nb)) %>% 
+    summarise(totalPeople=sum(nb), .groups = 'drop') %>% 
     drop_na()
   return(toReturn)
 }

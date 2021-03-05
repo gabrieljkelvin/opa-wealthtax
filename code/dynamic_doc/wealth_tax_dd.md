@@ -1,7 +1,7 @@
 ---
 # To compile into .doc format, please see this tutorial: ADD LINK
 title: "<center><div class= 'mytitle'>Open Policy Analysis For Senator Warren's Wealth Tax </div></center>"
-date: "<center><div class='mysubtitle'>04 March, 2021</div></center>"
+date: "<center><div class='mysubtitle'>05 March, 2021</div></center>"
 author:
 - 'Policy Analysis: Emmanuel Saez  & Gabriel Zucman[^1]'
 - 'Dynamic Document: Fernando Hoces de la Guardia[^2]'
@@ -596,7 +596,7 @@ The 961 households with assests totaling over $1 billion dollars would have a to
 
 #This function computes the total tax collected for a tax unit with wealth "wealth_var", applying "taxrates_var" to "brackets_var"
 # - inputs: wealth, tax rates, brackets to tax
-# - ouputs: total tax collected
+# - outputs: total tax collected
 get_tax_rev <- function(wealth_var = wealth_aux, taxrates_var = tax_rates_po,
                           brackets_var = brackets_po) {
     ## expecting taxLevels in percentage
@@ -606,7 +606,7 @@ get_tax_rev <- function(wealth_var = wealth_aux, taxrates_var = tax_rates_po,
     }
    # Compute max taxable wealth per bracket
     max_tax_per_brack <- c(diff(c(0, brackets_var)), 1e100)
-   # Substract wealth minus tax bracket. If wealth above a given bracket (difference is larger than max taxable wealth), 
+   # Subtract wealth minus tax bracket. If wealth above a given bracket (difference is larger than max taxable wealth), 
    # then assign max taxable wealth to that given bracket
     to_tax <- ifelse( wealth_var - c(0, brackets_var) > max_tax_per_brack, 
                       max_tax_per_brack, 
@@ -632,33 +632,9 @@ get_tax_rev_per_group <- function(grid_var = grid, taxLevels_var = tax_rates_po,
   return(sum(grid_var$nb * aux_var) / 1e9)
 }
 
-tax_rev_init_mo <- get_tax_rev_per_group(taxLevels = c(tax_rates_po[-7], 0.02))
-```
-
-```
-## Warning in get_tax_rev_per_group(taxLevels = c(tax_rates_po[-7], 0.02)): partial
-## argument match of 'taxLevels' to 'taxLevels_var'
-```
-
-```r
-top_tax_rev_in <- get_tax_rev_per_group(taxLevels = c(rep(0,6), 0.01))
-```
-
-```
-## Warning in get_tax_rev_per_group(taxLevels = c(rep(0, 6), 0.01)): partial
-## argument match of 'taxLevels' to 'taxLevels_var'
-```
-
-```r
-total_tax_rev <- get_tax_rev_per_group(taxLevels = tax_rates_po)
-```
-
-```
-## Warning in get_tax_rev_per_group(taxLevels = tax_rates_po): partial argument
-## match of 'taxLevels' to 'taxLevels_var'
-```
-
-```r
+tax_rev_init_mo <- get_tax_rev_per_group(taxLevels_var = c(tax_rates_po[-7], 0.02))
+top_tax_rev_in <- get_tax_rev_per_group(taxLevels_var = c(rep(0,6), 0.01))
+total_tax_rev <- get_tax_rev_per_group(taxLevels_var = tax_rates_po)
 #199.7889
 
 # The following replicates stata code more closely and seems more straightforward. 
@@ -674,7 +650,7 @@ if (FALSE){
     #billionares additional 1%
     top_tax_rev_in <- grid %>% 
       filter(thresNew > next_increase_po) %>% 
-      summarise(sum((avgNew - next_increase_po) * nb * 0.01)/1e9) %>% as.numeric()
+      summarise(sum((avgNew - next_increase_po) * nb * 0.01)/1e9, ) %>% as.numeric()
     
     total_tax_rev <- total_tax_base + total_tax_sur_bill
 }
@@ -685,19 +661,13 @@ getPeoplePerBracket=function(grid, brackets){
   grid$group=cut(grid$thresNew, brackets)
   toReturn = grid %>% 
     group_by(group) %>% 
-    summarise(totalPeople=sum(nb)) %>% 
+    summarise(totalPeople=sum(nb), .groups = 'drop') %>% 
     drop_na()
   return(toReturn)
 }
 
 numberTaxpayers <- getPeoplePerBracket(brackets = brackets_po, grid = grid)
-```
 
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```r
 #Revenue
 #From here on: keep
 target_hhlds_mo <- sum( numberTaxpayers$totalPeople[brackets_po>=starting_brack_po] )
@@ -893,27 +863,27 @@ plot <- data[, -rmIdx] %>%
   plot
 ```
 
-<!--html_preserve--><div id="plot_id306507719-container" class="ggvis-output-container">
-<div id="plot_id306507719" class="ggvis-output"></div>
+<!--html_preserve--><div id="plot_id565578787-container" class="ggvis-output-container">
+<div id="plot_id565578787" class="ggvis-output"></div>
 <div class="plot-gear-icon">
 <nav class="ggvis-control">
 <a class="ggvis-dropdown-toggle" title="Controls" onclick="return false;"></a>
 <ul class="ggvis-dropdown">
 <li>
 Renderer: 
-<a id="plot_id306507719_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id306507719" data-renderer="svg">SVG</a>
+<a id="plot_id565578787_renderer_svg" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id565578787" data-renderer="svg">SVG</a>
  | 
-<a id="plot_id306507719_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id306507719" data-renderer="canvas">Canvas</a>
+<a id="plot_id565578787_renderer_canvas" class="ggvis-renderer-button" onclick="return false;" data-plot-id="plot_id565578787" data-renderer="canvas">Canvas</a>
 </li>
 <li>
-<a id="plot_id306507719_download" class="ggvis-download" data-plot-id="plot_id306507719">Download</a>
+<a id="plot_id565578787_download" class="ggvis-download" data-plot-id="plot_id565578787">Download</a>
 </li>
 </ul>
 </nav>
 </div>
 </div>
 <script type="text/javascript">
-var plot_id306507719_spec = {
+var plot_id565578787_spec = {
   "data": [
     {
       "name": ".0",
@@ -1401,7 +1371,7 @@ var plot_id306507719_spec = {
   },
   "handlers": null
 };
-ggvis.getPlot("plot_id306507719").parseSpec(plot_id306507719_spec);
+ggvis.getPlot("plot_id565578787").parseSpec(plot_id565578787_spec);
 </script><!--/html_preserve-->
  <font size="4"> Tax revenue from wealth tax in first year: $199 billion </font>  
  
